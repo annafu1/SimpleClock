@@ -92,13 +92,13 @@ public class SimpleClock extends JFrame implements ItemListener {
                 timezone.setText("EST");
                 dayFormat=new SimpleDateFormat("EEEE");
                 dateFormat=new SimpleDateFormat("dd MMMMM, yyyy");
-                TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+                TimeZone.setDefault(TimeZone.getTimeZone("EST"));
 
             } else {
                 timezone.setText("GMT");
                 dayFormat=new SimpleDateFormat("EEEE");
                 dateFormat=new SimpleDateFormat("dd MMMMM, yyyy");
-                TimeZone.setDefault(TimeZone.getTimeZone("EST"));
+                TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
             }
             if(militaryTime.isSelected()) {
                 militaryTime.setText("24hr");
