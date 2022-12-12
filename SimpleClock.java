@@ -2,13 +2,16 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
-public class SimpleClock extends JFrame {
+public class SimpleClock extends JFrame implements ItemListener {
     
-        Calendar calendar;
+        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat timeFormat;
         SimpleDateFormat dayFormat;
         SimpleDateFormat dateFormat;
@@ -20,32 +23,43 @@ public class SimpleClock extends JFrame {
         String day;
         String date;
 
+        JToggleButton timezone;
+        JToggleButton militaryTime;
+
         SimpleClock() {
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setTitle("Digital Clock");
             this.setLayout(new FlowLayout());
-            this.setSize(350, 220);
+            this.setSize(400, 300);
             this.setResizable(false);
     
             timeFormat = new SimpleDateFormat("hh:mm:ss a");
             dayFormat=new SimpleDateFormat("EEEE");
             dateFormat=new SimpleDateFormat("dd MMMMM, yyyy");
             timeLabel = new JLabel();
-            timeLabel.setFont(new Font("SANS_SERIF", Font.PLAIN, 59));
-            timeLabel.setBackground(Color.BLACK);
-            timeLabel.setForeground(Color.WHITE);
+            timeLabel.setFont(new Font("SANS_SERIF", Font.PLAIN, 40));
+            timeLabel.setBackground(Color.GREEN);
+            timeLabel.setForeground(Color.RED);
             timeLabel.setOpaque(true);
             dayLabel=new JLabel();
-            dayLabel.setFont(new Font("Ink Free",Font.BOLD,34));
+            dayLabel.setFont(new Font("Ink Free",Font.BOLD,40));
     
             dateLabel=new JLabel();
-            dateLabel.setFont(new Font("Ink Free",Font.BOLD,30));
-    
+            dateLabel.setFont(new Font("Ink Free",Font.BOLD,40));
+
+            calendar.getTimeZone();
+            timezone = new JToggleButton("GMT");
+            timezone.addItemListener(this);
+            militaryTime = new JToggleButton("24hr");
+            militaryTime.addItemListener(this);
+
     
             this.add(timeLabel);
             this.add(dayLabel);
             this.add(dateLabel);
             this.setVisible(true);
+            this.add(timezone);
+            this.add(militaryTime);
     
             setTimer();
         }
@@ -71,4 +85,27 @@ public class SimpleClock extends JFrame {
         public static void main(String[] args) {
             new SimpleClock();
         }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+            if(timezone.isSelected()) {
+                timezone.setText("EST");
+                dayFormat=new SimpleDateFormat("EEEE");
+                dateFormat=new SimpleDateFormat("dd MMMMM, yyyy");
+                TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+
+            } else {
+                timezone.setText("GMT");
+                dayFormat=new SimpleDateFormat("EEEE");
+                dateFormat=new SimpleDateFormat("dd MMMMM, yyyy");
+                TimeZone.setDefault(TimeZone.getTimeZone("EST"));
+            }
+            if(militaryTime.isSelected()) {
+                militaryTime.setText("24hr");
+                timeFormat = new SimpleDateFormat(" HH:mm:ss a ");
+            } else {
+                militaryTime.setText("12hr");
+                timeFormat = new SimpleDateFormat(" hh:mm:ss a ");
+            }
     }
+}
